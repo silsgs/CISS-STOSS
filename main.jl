@@ -20,7 +20,7 @@ function read_params(name_wd)
     return vars
 end
 
-function calculate_prbabilities()
+function calculate_probabilities()
     
 end
 
@@ -35,11 +35,33 @@ print(vars)
 # setting data structures
 tot_strands = Int.(vars["n_strands"]) * 2
 tot_steps = Int.(vars["total_time"] / vars["time_step"]) 
+alpha_init_pos = Int.(vars["alpha_starts"])
+beta_init_pos = Int.(vars["beta_starts"])
 
-init_matrix = zeros(Int8, tot_strands, tot_steps) # cols, rows
+#setting initial state
+init_state_matrix = zeros(Int8, tot_strands, tot_steps) # rows, cols
+dim = size(init_state_matrix) 
+odd_nums = 1:2:100   # alpha channels
+even_nums = 2:2:100  # beta channels
 
-for i in init_matrix[:,1] # runs over rows
-    for j in init_matrix_dim[:,1] # runs over cols
+for i = 1:dim[1] # rows
+    if isodd(i)  # means its alpha channel
+        init_state_matrix[i,alpha_init_pos] = 1
+    else         # means its beta channel
+        init_state_matrix[i,beta_init_pos] = 1
+    end
+end
+
+#
+## main loop
+#
+# loop running over state matrix # first step
+for i = dim[1]       # runs over rows
+    for j = dim[2]   # runs over cols
+        # what do we need to do first
+        # calculate probability of change position
+
+        # what do we need to do secondly
 
     end 
 end
