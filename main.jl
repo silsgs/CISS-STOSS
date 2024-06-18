@@ -33,6 +33,7 @@ vars = read_params(path_wd)
 print(vars)
 
 # setting data structures
+n_cycles = Int.(vars["cycles"])
 tot_strands = Int.(vars["n_strands"]) * 2
 tot_steps = Int.(vars["total_time"] / vars["time_step"]) 
 alpha_init_pos = Int.(vars["alpha_starts"])
@@ -55,13 +56,20 @@ end
 #
 ## main loop
 #
+# loop over number of cycles
+for run = 1:n_cycles
+
 # loop running over state matrix # first step
-for i = dim[1]       # runs over rows
-    for j = dim[2]   # runs over cols
+for i = dim[1]          # runs over rows
+    for j in odd_nums   # runs over alpha channels
         # what do we need to do first
-        # calculate probability of change position
+        # calculate probability for alpha e-
+        
+    end
 
-        # what do we need to do secondly
+    for l in even_nums  # runs over beta channels
+        # calculate probability for beta e- 
+    end
 
-    end 
+end
 end
