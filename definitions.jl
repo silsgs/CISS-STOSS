@@ -5,7 +5,7 @@
 # 3.6 Aa/turn ; 3 Aa -> 450pm -> 4.5 Angstroms
 n_strands = 2         # minimum is 1
 n_turns_step = 5      # min is 5, Davydov soliton
-n_steps = 2           # total mol length will be calculated
+n_steps = 2           # total mol length will be calculated: (( Int.(vars["n_turns_step"]) * Int.(vars["n_steps"]) ) * 3.6 * (4.5/3)   # length in Angstrom)
 total_time = 100      # ns 
 time_step = 1         # can be chosen by user; ns/step
 temp = 300            # kelvin, K
@@ -17,3 +17,4 @@ cycles = 4            # times to calculate
 alpha_starts = 1.0    # alpha e- position to start
 beta_starts = 1.0     # beta e- position to start
 helix_twisting = 0    # 0 -> right-handed; 1 -> left-handed
+magnetochiral_anisotropy = 2.0 # value units

@@ -21,12 +21,19 @@ function read_params(name_wd)
     return vars
 end
 
-function calculate_probabilities()
+function calculate_Boltzmann() 
     
 end
 
+function calculate_energy_step()
+    E = (e_charge * voltage / n_steps) + ((magnetochiral_ani * voltage) * electron_spin) 
+     
+    return E
+end
+
+
 #
-## program starts
+## program starts here
 #
 # global path and reading params
 path_wd = pwd()
@@ -49,9 +56,20 @@ beta_spin = Int.(1)
 type_of_pulse = Int.(vars["type_of_pulse"])   # 0 -> ac; 1 -> dc
 voltage_magnitude = vars["voltage"]         # magnitude of V pulse
 voltage_freq = vars["freq_voltage"]         # if ac, frequency of V pulse
+# 
+T =  vars["temp"]   # temperature, T(K)
+k = 11604.525       # where it comes from? 8.617333262*10^-5 ev/K
 
-#print("  mol length  ")
-#print(mol_lenght)
+
+# print("  mol length  ")
+# print(mol_lenght)
+
+# pending tasks
+# crear lista historia upwards, downwards
+# AC // DC voltages loop
+# definition of magnetochiral_ani
+# where to apply Davydov polaron inertia
+
 
 #setting initial state
 init_state_matrix = zeros(Int8, tot_strands, tot_steps) # rows, cols

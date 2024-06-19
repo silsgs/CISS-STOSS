@@ -28,7 +28,7 @@ function [electric_field, right_probability, left_probability, P_ij, E] = applie
         %left_probability = yy + left_probability;
 
         downwards_p = total_probability / (1 + P_ij)   % double check sign
-        upwards_p = (P_ij * total_probability) / (1 + P_ij)   
+        upwards_p = (P_ij * total_probability) / (1 + P_ij)   # ratio prob
 
         electric_field = electric_field + constant_voltage; % duda
 
