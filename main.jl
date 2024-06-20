@@ -25,12 +25,11 @@ function calculate_Boltzmann()
     
 end
 
-function calculate_energy_step()
+function calculate_energy_step(e_charge, voltage, n_steps, magnetochiral_ani, electron_spin)
+    # calculating E of each step
     E = (e_charge * voltage / n_steps) + ((magnetochiral_ani * voltage) * electron_spin) 
-     
     return E
 end
-
 
 #
 ## program starts here
@@ -59,12 +58,9 @@ voltage_freq = vars["freq_voltage"]         # if ac, frequency of V pulse
 # 
 T =  vars["temp"]   # temperature, T(K)
 k = 11604.525       # where it comes from? 8.617333262*10^-5 ev/K
+magnetochiral_ani = Int.(vars["magnetochiral_anisotropy"]) 
 
-
-# print("  mol length  ")
-# print(mol_lenght)
-
-# pending tasks
+# pending tasks 
 # crear lista historia upwards, downwards
 # AC // DC voltages loop
 # definition of magnetochiral_ani
