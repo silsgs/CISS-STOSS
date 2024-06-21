@@ -35,6 +35,7 @@ end
 ## program starts here
 #
 # global path and reading params
+using Plots
 path_wd = pwd()
 vars = read_params(path_wd)
 print(vars)
@@ -67,11 +68,18 @@ magnetochiral_ani = Int.(vars["magnetochiral_anisotropy"])
 # where to apply Davydov polaron inertia
 
 # generating voltage pulse
-if type_of_pulse == 0
-    voltage = sin 
-else
-    voltage = voltage_magnitude 
+pulse_Vs = []
+if type_of_pulse < 1  # ac pulse
+    for i = 1:tot_steps
+    Vi = voltage_magnitude*cos((pi/2)+(i*voltage_freq*2*pi)/tot_steps)
+    append!(pulse_Vs, Vi)
+    end
+else                  # dc pulse
+    pulse_Vs = repeat([voltage_magnitude], outer=tot_steps) 
 end
+print(length(pulse_Vs))
+x = range(0, vars["total_time"], length=tot_steps)
+plot(x, pulse_Vs)
 
 #setting initial state
 init_state_matrix = zeros(Int8, tot_strands, tot_steps) # rows, cols
