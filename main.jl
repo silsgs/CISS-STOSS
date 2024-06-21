@@ -71,6 +71,7 @@ if type_of_pulse == 0
     voltage = sin 
 else
     voltage = voltage_magnitude 
+end
 
 #setting initial state
 init_state_matrix = zeros(Int8, tot_strands, tot_steps) # rows, cols
