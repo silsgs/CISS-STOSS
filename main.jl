@@ -21,14 +21,14 @@ function read_params(name_wd)
     return vars
 end
 
-function calculate_Boltzmann() 
-    
-end
-
 function calculate_energy_step(e_charge, voltage, n_steps, magnetochiral_ani, electron_spin)
     # calculating E of each step
     E = (e_charge * voltage / n_steps) + ((magnetochiral_ani * voltage) * electron_spin) 
     return E
+end
+
+function calculate_Boltzmann() 
+    
 end
 
 #
@@ -66,6 +66,11 @@ magnetochiral_ani = Int.(vars["magnetochiral_anisotropy"])
 # definition of magnetochiral_ani
 # where to apply Davydov polaron inertia
 
+# generating voltage pulse
+if type_of_pulse == 0
+    voltage = sin 
+else
+    voltage = voltage_magnitude 
 
 #setting initial state
 init_state_matrix = zeros(Int8, tot_strands, tot_steps) # rows, cols
