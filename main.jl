@@ -27,19 +27,30 @@ function calculate_energy_step(e_charge, voltage, n_steps, magnetochiral_ani, el
     return E
 end
 
-function calculate_Boltzmann() 
-    
+function calculate_Boltzmann(E, k, T) 
+    # probability of change in every step
+    P_ij = 1/(exp(E*k/T))   # ratio excited states / ground states population [0-1] 
+    return P_ij
 end
+
+function single_probability(total_probability, P_ij)
+    yy = (total_probability/(1 + P_ij))
+    xx = P_ij * yy
+    return yy, xx
+end
+
+
 
 #
 ## program starts here
 #
-# global path and reading params
+# modules call, global path and reading input params
 using Plots
 path_wd = pwd()
 vars = read_params(path_wd)
 print(vars)
 
+###########################################################
 # setting data structures and variables
 n_cycles = Int.(vars["cycles"])
 tot_strands = Int.(vars["n_strands"]) * 2
@@ -48,18 +59,21 @@ mol_lenght = ( Int.(vars["n_turns_step"]) * Int.(vars["n_steps"]) ) * 3.6 * (4.5
 alpha_init_pos = Int.(vars["alpha_starts"])
 beta_init_pos = Int.(vars["beta_starts"])
 # 
-twisting_dir = Int.(vars["helix_twisting"]) # 0 -> right-h; 1 -> left-h
+twisting_dir = Int.(vars["helix_twisting"])   # 0 -> right-h; 1 -> left-h
 e_charge = Int.(-1) 
 alpha_spin = Int.(-1)
 beta_spin = Int.(1)
 # 
 type_of_pulse = Int.(vars["type_of_pulse"])   # 0 -> ac; 1 -> dc
-voltage_magnitude = vars["voltage"]         # magnitude of V pulse
-voltage_freq = vars["freq_voltage"]         # if ac, frequency of V pulse
+voltage_magnitude = vars["voltage"]           # magnitude of V pulse
+voltage_freq = vars["freq_voltage"]           # if ac, frequency of V pulse
 # 
 T =  vars["temp"]   # temperature, T(K)
-k = 11604.525       # where it comes from? 8.617333262*10^-5 ev/K
+k = 11604.525       # where does it come from? 8.617333262*10^-5 ev/K
 magnetochiral_ani = Int.(vars["magnetochiral_anisotropy"]) 
+#
+total_probability = 0.00995 # taylor expansion, exp decreciente
+###########################################################
 
 # pending tasks 
 # crear lista historia upwards, downwards
@@ -77,6 +91,8 @@ if type_of_pulse < 1  # ac pulse
 else                  # dc pulse
     pulse_Vs = repeat([voltage_magnitude], outer=tot_steps) 
 end
+
+# check
 print(length(pulse_Vs))
 x = range(0, vars["total_time"], length=tot_steps)
 plot(x, pulse_Vs)
@@ -84,8 +100,8 @@ plot(x, pulse_Vs)
 #setting initial state
 init_state_matrix = zeros(Int8, tot_strands, tot_steps) # rows, cols
 dim = size(init_state_matrix) 
-odd_nums = 1:2:100   # alpha channels
-even_nums = 2:2:100  # beta channels
+odd_nums = 1:2:100   # row indexes alpha channels
+even_nums = 2:2:100  # row indexes beta channels
 
 for i = 1:dim[1] # rows
     if isodd(i)  # means its alpha channel
@@ -96,10 +112,16 @@ for i = 1:dim[1] # rows
 end
 
 #
-## main loop
+##
+### main loop
+##
 #
 # loop over number of cycles
-for run = 1:n_cycles
+global_trajectory = Dict{String, Vector}()   # "n_cycle + (up/down)wards_move": list
+for n_run = 1:n_cycles
+
+upwards_move = []
+downwards_move = []
 
 # loop running over state matrix # first step
 for i = dim[1]          # runs over rows
@@ -115,4 +137,9 @@ for i = dim[1]          # runs over rows
     end
 
 end
+
+# filling global trajectory dict
+global_trajectory[string(n_run)*"_upwards"] = upwards_move
+global_trajectory[string(n_run)*"_downwards"] = downwards_move
+
 end
