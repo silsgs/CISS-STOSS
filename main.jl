@@ -124,19 +124,17 @@ upwards_move = []
 downwards_move = []
 
 # loop running over state matrix # first step
-for i = dim[1]          # runs over rows
-    for j in odd_nums   # runs over alpha channels
+for i = dim[1]          # runs over total steps (cols)
+    for i in odd_nums   # runs over alpha channels (rows)
         # what do we need to do first
         # calculate probability for alpha e-
-        
     end
-
-    for l in even_nums  # runs over beta channels
+    
+    for i in even_nums  # runs over beta channels (rows)
         # calculate probability for beta e- 
-
     end
-
 end
+
 
 # filling global trajectory dict
 global_trajectory[string(n_run)*"_upwards"] = upwards_move
