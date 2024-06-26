@@ -39,10 +39,10 @@ function single_probability(total_probability, P_ij)
     return yy, xx
 end
 
-
-
 #
-## program starts here
+##
+### program starts here
+##
 #
 # modules call, global path and reading input params
 using Plots
@@ -76,8 +76,6 @@ total_probability = 0.00995 # taylor expansion, exp decreciente
 ###########################################################
 
 # pending tasks 
-# crear lista historia upwards, downwards
-# AC // DC voltages loop
 # definition of magnetochiral_ani
 # where to apply Davydov polaron inertia
 
@@ -112,10 +110,9 @@ for i = 1:dim[1] # rows
 end
 
 #
-##
 ### main loop
-##
 #
+
 # loop over number of cycles
 global_trajectory = Dict{String, Vector}()   # "n_cycle + (up/down)wards_move": list
 for n_run = 1:n_cycles
@@ -134,7 +131,6 @@ for i = dim[1]          # runs over total steps (cols)
         # calculate probability for beta e- 
     end
 end
-
 
 # filling global trajectory dict
 global_trajectory[string(n_run)*"_upwards"] = upwards_move
