@@ -22,7 +22,7 @@ function read_params(name_wd)
 end
 
 function calculate_energy_step(e_charge, voltage, n_steps, magnetochiral_ani, electron_spin)
-    # calculating E of each step
+    ### calculating E of each step
     E = (e_charge * voltage / n_steps) + ((magnetochiral_ani * voltage) * electron_spin) 
     return E
 end
