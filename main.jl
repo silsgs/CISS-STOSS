@@ -23,13 +23,13 @@ end
 
 function calculate_energy_step(e_charge, voltage, n_steps, magnetochiral_ani, electron_spin)
     ### calculating E of each step
-    E = (e_charge * voltage / n_steps) + ((magnetochiral_ani * voltage) * electron_spin) 
+    E = (e_charge * voltage / n_steps) #+ ((magnetochiral_ani * voltage) * electron_spin) 
     return E
 end
 
 function calculate_Boltzmann(E, k, T) 
-    # probability of change in every step
-    P_ij = 1/(exp(E*k/T))   # ratio excited states / ground states population [0-1] 
+    # probability ratio of jumpin forward vs backward 
+    P_ij = 1/(exp(2*E*k/T))   # ratio move backwards movement vs forwards movement [0-1] 
     return P_ij
 end
 
@@ -55,7 +55,6 @@ print(vars)
 n_cycles = Int.(vars["cycles"])
 n_steps = Int.(vars["n_steps"]) 
 tot_strands = Int.(vars["n_strands"]) * 2
-tot_steps = Int.(vars["total_time"] / vars["time_step"]) # ns
 mol_length = ( Int.(vars["n_turns_step"]) * Int.(vars["n_steps"]) ) * 3.6 * (4.5/3)   # length in Angstrom 
 alpha_init_pos = Int.(vars["alpha_starts"])
 beta_init_pos = Int.(vars["beta_starts"])
@@ -69,16 +68,22 @@ type_of_pulse = Int.(vars["type_of_pulse"])   # 0 -> ac; 1 -> dc
 voltage_magnitude = vars["voltage"]           # magnitude of V pulse
 voltage_freq = vars["voltage_freq"]           # if ac, frequency of V pulse
 # 
+relaxation_time = vars["relaxation_time"]
+relaxation_rate = 1/relaxation_time
 T =  vars["temp"]   # temperature, T(K)
 k = 11604.525       # where does it come from? 8.617333262*10^-5 ev/K
 magnetochiral_ani = Int.(vars["magnetochiral_anisotropy"]) 
-#
+# t, tau, p relations
+total_time = 20*relaxation_time # 20 movements aprox
+time_step = relaxation_time/100
 total_probability = 0.00995 # taylor expansion, exp decreciente
+# tot_steps main loop
+tot_steps = total_time/time_step
 ###########################################################
-
 # pending tasks 
 # definition of magnetochiral_ani
 # where to apply Davydov polaron inertia
+###########################################################
 
 # generating voltage pulse
 pulse_Vs = []
@@ -116,6 +121,11 @@ end
 
 # loop over number of cycles
 global_trajectory = Dict{String, Vector}()   # "n_cycle + (up/down)wards_move": list
+
+### DC sampling
+
+
+### AC sampling
 for n_run = 1:n_cycles
 
 upwards_move = []
@@ -123,13 +133,9 @@ downwards_move = []
 
 # loop running over state matrix # first step
 for i = dim[1]          # runs over total steps (cols)
-    for i in odd_nums   # runs over alpha channels (rows)
+    for i in time_step   # runs over alpha channels (rows)
         # what do we need to do first
         # calculate probability for alpha e-
-    end
-    
-    for i in even_nums  # runs over beta channels (rows)
-        # calculate probability for beta e- 
     end
 end
 
