@@ -53,20 +53,21 @@ print(vars)
 ###########################################################
 # setting data structures and variables
 n_cycles = Int.(vars["cycles"])
+n_steps = Int.(vars["n_steps"]) 
 tot_strands = Int.(vars["n_strands"]) * 2
-tot_steps = Int.(vars["total_time"] / vars["time_step"]) 
-mol_lenght = ( Int.(vars["n_turns_step"]) * Int.(vars["n_steps"]) ) * 3.6 * (4.5/3)   # length in Angstrom 
+tot_steps = Int.(vars["total_time"] / vars["time_step"]) # ns
+mol_length = ( Int.(vars["n_turns_step"]) * Int.(vars["n_steps"]) ) * 3.6 * (4.5/3)   # length in Angstrom 
 alpha_init_pos = Int.(vars["alpha_starts"])
 beta_init_pos = Int.(vars["beta_starts"])
 # 
-twisting_dir = Int.(vars["helix_twisting"])   # 0 -> right-h; 1 -> left-h
+twisting_dir = Int.(vars["helix_twisting"])   # -1 -> right-h; 1 -> left-h
 e_charge = Int.(-1) 
 alpha_spin = Int.(-1)
 beta_spin = Int.(1)
 # 
 type_of_pulse = Int.(vars["type_of_pulse"])   # 0 -> ac; 1 -> dc
 voltage_magnitude = vars["voltage"]           # magnitude of V pulse
-voltage_freq = vars["freq_voltage"]           # if ac, frequency of V pulse
+voltage_freq = vars["voltage_freq"]           # if ac, frequency of V pulse
 # 
 T =  vars["temp"]   # temperature, T(K)
 k = 11604.525       # where does it come from? 8.617333262*10^-5 ev/K
@@ -83,7 +84,7 @@ total_probability = 0.00995 # taylor expansion, exp decreciente
 pulse_Vs = []
 if type_of_pulse < 1  # ac pulse
     for i = 1:tot_steps
-    Vi = voltage_magnitude*cos((pi/2)+(i*voltage_freq*2*pi)/tot_steps)
+    Vi = voltage_magnitude*cos((pi/2)+(i*voltage_freq)*(tot_steps*10^-9)) # radians/s
     append!(pulse_Vs, Vi)
     end
 else                  # dc pulse
