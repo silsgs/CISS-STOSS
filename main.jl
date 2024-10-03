@@ -39,6 +39,11 @@ function single_probability(total_probability, P_ij)
     return yy, xx
 end
 
+function random_n()
+    rn = rand(Float64)  # generates random number between 0-1
+    return rn
+end
+
 #
 ##
 ### program starts here
@@ -82,7 +87,7 @@ tot_steps = total_time/time_step
 ###########################################################
 # pending tasks 
 # definition of magnetochiral_ani
-# where to apply Davydov polaron inertia
+# where to apply Davydov polaron inertia - future work
 ###########################################################
 
 # generating voltage pulse
@@ -102,16 +107,17 @@ x = range(0, vars["total_time"], length=tot_steps)
 plot(x, pulse_Vs)
 
 #setting initial state
-init_state_matrix = zeros(Int8, tot_strands, tot_steps) # rows, cols
+init_state_matrix = zeros(Int8, tot_strands*2, tot_steps) # rows*2(alpha,beta), cols
 dim = size(init_state_matrix) 
-odd_nums = 1:2:100   # row indexes alpha channels
-even_nums = 2:2:100  # row indexes beta channels
+odd_nums = 1:2:tot_steps   # odd row indexes -> alpha channels
+even_nums = 2:2:tot_steps  # even row indexes -> beta channels
 
+# this needs to be changed; percentage of spin polarization 
 for i = 1:dim[1] # rows
     if isodd(i)  # means its alpha channel
         init_state_matrix[i,alpha_init_pos] = 1
     else         # means its beta channel
-        init_state_matrix[i,beta_init_pos] = 1
+        init_state_matrix[i,beta_init_pos] = 0 ## double check, only 1 e per helix
     end
 end
 
@@ -134,8 +140,15 @@ downwards_move = []
 # loop running over state matrix # first step
 for i = dim[1]          # runs over total steps (cols)
     for i in time_step   # runs over alpha channels (rows)
-        # what do we need to do first
         # calculate probability for alpha e-
+        E_single = calculate_energy_step()
+        
+        # calculate boltzman distrib
+        P_boltz = calculate_Boltzmann()
+        
+        #hopping eval
+
+
     end
 end
 
